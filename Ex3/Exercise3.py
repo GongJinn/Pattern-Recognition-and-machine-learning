@@ -18,27 +18,15 @@ y1=np.zeros(500)
 y2=np.cos(2 * np.pi * 0.1 * n)
 y3=np.zeros(300)
 y=np.concatenate((y1,y2,y3))
-plt.figure()
-plt.title("Noiseless Signal")
-plt.xticks(np.linspace(0,900,10))
-plt.yticks(np.linspace(-1,1,5))
-plt.plot(x, y)
-plt.show()
+
 
 #PartB
 y_n = y + np.sqrt(0.5) * np.random.randn(y.size)
-plt.figure()
-plt.title("Noisy Signal")
-plt.xticks(np.linspace(0,900,10))
-plt.yticks(np.linspace(-3,3,7))
-plt.plot(x, y_n)
-plt.show()
+
 ##
-yT=[]
-for i in x:
-    yT.append(sum(y_n[0:i])*np.cos(2 * np.pi * 0.1 * i))
-plt.plot(x, yT)
-plt.show()
+n=np.arange(100)
+h = np.exp(-2 * np.pi * 1j * 0.1* n)
+yT = np.convolve(h,y_n, 'same')
 
 #partC
 plt.figure()
@@ -65,24 +53,31 @@ y1=np.zeros(501)
 y2=np.cos(2 * np.pi * 0.03 * n+4.62)
 y3=np.zeros(300)
 y=np.concatenate((y1,y2,y3))
+
+#PartB
+y_n = y + np.sqrt(0.5) * np.random.randn(y.size)
+
+#PartC
+n=np.arange(100)
+h = np.exp(-2 * np.pi * 1j * 0.03 * n)
+yR = np.abs(np.convolve(h,y_n, 'same'))
+
+
 plt.figure()
+plt.subplot(3,1,1)
 plt.title("Noiseless Signal")
 plt.xticks(np.linspace(0,900,10))
 plt.yticks(np.linspace(-1,1,5))
 plt.plot(x, y)
-plt.show()
-#PartB
-y_n = y + np.sqrt(0.5) * np.random.randn(y.size)
-plt.figure()
+plt.subplot(3,1,2)
 plt.title("Noisy Signal")
 plt.xticks(np.linspace(0,900,10))
 plt.yticks(np.linspace(-3,3,7))
 plt.plot(x, y_n)
-plt.show()
-##
-h = np.exp(-2 * np.pi * 1j * 0.03 * n)
-yR = np.abs(np.convolve(h,y_n[501:599], 'same'))
-plt.plot(n, yR)
+plt.subplot(3,1,3)
+plt.title("Detection Result")
+plt.xticks(np.linspace(0,900,10))
+plt.plot(x, yR)
 plt.show()
 ####################Q5####################
 from sklearn import neighbors
@@ -109,9 +104,9 @@ Ytest=Y[200:]
 model=neighbors.KNeighborsClassifier(n_neighbors=8, leaf_size=1)
 model.fit(Xtrain,Ytrain)
 Ypredict1=model.predict(Xtest)
-accuracy_score(Ytest,Ypredict1)
+print(accuracy_score(Ytest,Ypredict1))
 #Part D
 clf = LinearDiscriminantAnalysis()
 clf.fit(Xtrain,Ytrain)
 Ypredict2=clf.predict(Xtest)
-accuracy_score(Ytest,Ypredict2)
+print(accuracy_score(Ytest,Ypredict2))
