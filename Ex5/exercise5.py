@@ -16,7 +16,7 @@ def log_loss(w, X, y):
     L = 0 # Accumulate loss terms here.
     # Process each sample in X:
     for n in range(X.shape[0]):
-        L += np.log(1 + np.exp(y[n] * np.dot(w, X[n])))
+        L += np.log(1 + np.exp(-y[n] * np.dot(w, X[n])))
     return L
     
 def grad(w, X, y):
